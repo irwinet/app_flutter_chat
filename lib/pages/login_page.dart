@@ -1,5 +1,8 @@
-import 'package:app_flutter_chat/widgets/custom_input.dart';
 import 'package:flutter/material.dart';
+
+import 'package:app_flutter_chat/widgets/custom_input.dart';
+import 'package:app_flutter_chat/widgets/custom_labels.dart';
+import 'package:app_flutter_chat/widgets/custom_logo.dart';
 
 
 class LoginPage extends StatelessWidget {
@@ -12,35 +15,14 @@ class LoginPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _Logo(),
+            Logo(),
             _Form(),
-            _Labels(),
+            Labels(),
             Text('Términos y condiciones de uso', style: TextStyle(fontWeight: FontWeight.w200),)
           ],
         ),
       ),
    );
-  }
-}
-
-class _Logo extends StatelessWidget {
-  const _Logo({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: 170,
-        margin: EdgeInsets.only(top: 50),
-        child: const Column(
-          children: [
-            Image(image: AssetImage('assets/tag-logo.png')),
-            SizedBox(height: 20,),
-            Text('Messenger', style: TextStyle(fontSize: 30),)
-          ],
-        ),
-      ),
-    );
   }
 }
 
@@ -52,6 +34,11 @@ class _Form extends StatefulWidget {
 }
 
 class __FormState extends State<_Form> {
+
+
+  final emailCtrl = TextEditingController();
+  final passCtrl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -60,27 +47,28 @@ class __FormState extends State<_Form> {
       child: Column(
         children: [
           
-          CustomInput(),          
-          CustomInput(),          
+          CustomInput(
+            icon: Icons.mail_outline,
+            placeholder: 'Correo',
+            keyboardType: TextInputType.emailAddress,
+            textController: emailCtrl,
+          ), 
 
-          // ElevatedButton(onPressed: () {  }, child: null,)
-        ],
-      ),
-    );
-  }
-}
+          CustomInput(
+            icon: Icons.lock_outline,
+            placeholder: 'Contraseña',
+            textController: passCtrl,
+            isPassword: true,
+          ),         
+              
 
-class _Labels extends StatelessWidget {
-  const _Labels({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Text('¿No tienes cuenta?', style: TextStyle(color: Colors.black54, fontSize: 15, fontWeight: FontWeight.w300),),
-          SizedBox(height: 10,),
-          Text('Crea una ahora!', style: TextStyle(color: Colors.blue[600], fontSize: 18, fontWeight: FontWeight.bold),)
+          ElevatedButton(
+            onPressed: () {
+              print(emailCtrl.text);
+              print(passCtrl.text);
+            }, 
+            child: null,
+          )
         ],
       ),
     );
