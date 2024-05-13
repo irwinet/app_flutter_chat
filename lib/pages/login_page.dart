@@ -1,3 +1,4 @@
+import 'package:app_flutter_chat/widgets/boton_azul.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_flutter_chat/widgets/custom_input.dart';
@@ -62,12 +63,12 @@ class __FormState extends State<_Form> {
           ),         
               
 
-          ElevatedButton(
+          BotonAzul(
+            text: 'Ingrese',
             onPressed: () {
               print(emailCtrl.text);
               print(passCtrl.text);
-            }, 
-            child: null,
+            },
           )
         ],
       ),
