@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:app_flutter_chat/routes/routes.dart';
 
 void main() => runApp(const MyApp());
 
@@ -9,15 +10,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Material App',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Material App Bar'),
-        ),
-        body: const Center(
-          child: Text('Hello World'),
-        ),
-      ),
+      title: 'Chat App',
+      initialRoute: 'login',
+      routes: appRoutes,
     );
   }
 }
