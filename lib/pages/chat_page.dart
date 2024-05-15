@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_flutter_chat/widgets/chat_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,10 +11,14 @@ class ChatPage extends StatefulWidget {
   State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   final _textController = new TextEditingController();
   final _focusNode = new FocusNode();
+  List<ChatMessage> _messages = [
+    
+  ];
+
   bool _estaEscribiendo = false;
 
   @override
@@ -41,7 +46,8 @@ class _ChatPageState extends State<ChatPage> {
             Flexible(
               child: ListView.builder(
                 physics: BouncingScrollPhysics(),
-                itemBuilder: (_,i) => Text('$i'),
+                itemBuilder: (_,i) => _messages[i],
+                itemCount: _messages.length,
                 reverse: true,
               ),
             ),
@@ -112,12 +118,31 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   _handleSubmit(String texto) {
+    if (texto.length == 0) return;
+
     print(texto);
     _focusNode.requestFocus();
     _textController.clear();
 
+    final newMessage = new ChatMessage(
+      texto: texto,
+      uid: '123',
+      animationController: AnimationController(vsync: this, duration: Duration(milliseconds: 200)),
+    );
+    _messages.insert(0, newMessage);
+    newMessage.animationController.forward();
+
     setState(() {
       _estaEscribiendo = false;
     });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    for(ChatMessage message in _messages){
+      message.animationController.dispose();
+    }
+    super.dispose();
   }
 }
