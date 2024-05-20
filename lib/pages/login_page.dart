@@ -1,3 +1,4 @@
+import 'package:app_flutter_chat/helpers/mostrar_alerta.dart';
 import 'package:app_flutter_chat/services/auth_service.dart';
 import 'package:app_flutter_chat/widgets/boton_azul.dart';
 import 'package:flutter/material.dart';
@@ -82,12 +83,18 @@ class __FormState extends State<_Form> {
 
           BotonAzul(
             text: 'Ingrese',
-            onPressed: authService.autenticando ? null : () {
+            onPressed: authService.autenticando ? null : () async {
               print(emailCtrl.text);
               print(passCtrl.text);
               FocusScope.of(context).unfocus();
               
-              authService.login(emailCtrl.text.trim(), passCtrl.text.trim());
+              final loginOK = await authService.login(emailCtrl.text.trim(), passCtrl.text.trim());
+
+              if(loginOK){
+
+              } else {
+                mostrarAlerta(context, 'Login incorrecto', 'Revisen sus credenciales');
+              }
             },
           )
         ],
