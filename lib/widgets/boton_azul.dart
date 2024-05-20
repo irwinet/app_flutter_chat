@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class BotonAzul extends StatelessWidget {
   
-  final Function() onPressed;
+  final Function()? onPressed;
   final String text;
 
   const BotonAzul({super.key, required this.onPressed, required this.text});
