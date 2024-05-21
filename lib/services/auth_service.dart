@@ -65,6 +65,39 @@ class AuthService with ChangeNotifier {
 
   }
 
+  Future register(String nombre, String email, String password) async {
+    this.autenticando = true;
+
+    final data = {
+      'nombre': nombre,
+      'email': email,
+      'password': password
+    };  
+
+    final uri = Uri.parse('${Environment.apiUrl}/login/new');
+
+    final resp = await http.post(uri,
+      body: jsonEncode(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    );
+
+    print(resp.body);
+    this.autenticando = false;
+
+    if(resp.statusCode == 200){
+      final loginResponse = loginResponseFromJson(resp.body);
+      this.usuario = loginResponse.usuario;
+      await this._guardarToken(loginResponse.token);
+      
+      return true;
+    } else {
+      final respBody = jsonDecode(resp.body);
+      return respBody['msg'];
+    }  
+  }
+
   Future _guardarToken(String token) async {
     return await _storage.write(key: 'token', value: token);
   }
@@ -73,5 +106,28 @@ class AuthService with ChangeNotifier {
     await _storage.delete(key: 'token');
   }
 
+  Future<bool> isLoggedIn() async {
+    final token = await this._storage.read(key: 'token');
+    
+    final uri = Uri.parse('${Environment.apiUrl}/login/renew');
 
+    final resp = await http.get(uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-token': token ?? '',
+      }
+    );
+
+    print(resp.body);
+
+    if(resp.statusCode == 200){
+      final loginResponse = loginResponseFromJson(resp.body);
+      this.usuario = loginResponse.usuario;
+      await this._guardarToken(loginResponse.token);      
+      return true;
+    } else {
+      this.logout();
+      return false;
+    }  
+  }
 }
