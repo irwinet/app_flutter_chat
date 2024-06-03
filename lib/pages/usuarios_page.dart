@@ -1,6 +1,7 @@
 import 'package:app_flutter_chat/models/usuario.dart';
 import 'package:app_flutter_chat/services/auth_service.dart';
 import 'package:app_flutter_chat/services/socket_service.dart';
+import 'package:app_flutter_chat/services/usuarios_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -13,13 +14,22 @@ class UsuariosPage extends StatefulWidget {
 }
 
 class _UsuariosPageState extends State<UsuariosPage> {
+  final usuariosService = new UsuariosService();
   RefreshController _refreshController = RefreshController(initialRefresh: false);
+  List<Usuario> usuarios = [];
 
-  final usuarios = [
-    Usuario(online: true, email: 'test1@test.com', nombre: 'Maria', uid: '1'),
-    Usuario(online: true, email: 'test2@test.com', nombre: 'Melissa', uid: '2'),
-    Usuario(online: true, email: 'test3@test.com', nombre: 'Fernando', uid: '3'),
-  ];
+  // final usuarios = [
+  //   Usuario(online: true, email: 'test1@test.com', nombre: 'Maria', uid: '1'),
+  //   Usuario(online: true, email: 'test2@test.com', nombre: 'Melissa', uid: '2'),
+  //   Usuario(online: true, email: 'test3@test.com', nombre: 'Fernando', uid: '3'),
+  // ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    this._cargarUsuarios();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,8 +104,14 @@ class _UsuariosPageState extends State<UsuariosPage> {
 
   _cargarUsuarios() async{
     // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
+    // await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
+  
+    this.usuarios = await usuariosService.getUsuarios();
+    setState(() {
+      
+    });
+
     _refreshController.refreshCompleted();
   }
 }
